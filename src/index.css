@@ -353,6 +353,9 @@ body {
   .userChatImage{
     display: none;
   }
+  .sideBarNavName{
+    font-size: 13px;
+  }
 }
 
 @media only screen and (max-width: 667px){

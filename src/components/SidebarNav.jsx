@@ -15,6 +15,7 @@ function SidebarNav() {
 
   const {currentUser} = useContext(AuthContext)
 
+
   return (
     <div className='sideBarNav bg-teal-700'>
       

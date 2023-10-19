@@ -1,19 +1,33 @@
-import { useState } from "react"
+import { useState, useEffect} from "react"
 import {toast} from "react-toastify"
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import {db} from "../firebase"
+import { PhotoIcon} from "@heroicons/react/24/outline";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+
+
 
 function SignUp() {
     const navigate = useNavigate();
+    // const [dURL, setDurl] = useState("")
+   
+  
+
+
     const [formData, setFormData] = useState({
       fullname: '',
       matNo: '',
       profession: '',
       email: '',
       password:'',
+      // avatarUrl: '',
+      uid: ""
+    
   })
+
+ 
   
   //destructuring emanil and password from the form data
   const { email, password, profession, matNo, fullname} = formData
@@ -52,6 +66,13 @@ function SignUp() {
       }))
     }
 
+    // const onAvatarChange = (e) => {
+    //   setFormData((prevState) => ({
+    //     ...prevState,
+    //     avatarUrl: e.target.files[0]
+    //   }))
+    // }
+
 
     const submitForm = async (e) => {
       e.preventDefault();
@@ -59,37 +80,62 @@ function SignUp() {
       try{
           const auth = getAuth();
 
-          console.log(email)
-          console.log(password)
+          const res = await createUserWithEmailAndPassword(auth, email, password);
+          //Uploading the avatarUrl
+          // const storageRef = ref(storage, fullname)
+          // const uploadTask = uploadBytesResumable(storageRef, formData.avatarUrl)
 
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          //register three observer
+        //  uploadTask.on (
+        //     (error) => {
+        //       toast.error('Image Upload failed')
+        //     },
 
-          const user = userCredential.user;
+        //   async  ()  => { 
+        //       getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+        //                 // setDurl(downloadURL);
+                        
+        //               await updateProfile(res.user, {
+        //                 display:fullname,
+        //                 // photoURL: dURL
+        //               })
 
+                     
+        //         }
+                
+                
+                
+        //         )
+        //     }
+        //   )
+          
+       //creating an instance of the formData
+       const formDataCopy = {...formData};
+       delete formDataCopy.password
+       delete formDataCopy.avatarUrl
+       formDataCopy.uid = res.user.uid
+       formDataCopy.timestamp = serverTimestamp();
 
-          //update username
-          updateProfile(auth.currentUser, {
-            displayName: fullname
-          })
+       await updateProfile(res.user, {
+        displayName:fullname,            
+      })
 
-          //create a copy of form data
-          const formDataCopy = {...formData};
-          delete formDataCopy.password
-          formDataCopy.timestamp = serverTimestamp();
+       await setDoc(doc(db, 'users', res.user.uid), formDataCopy);
+       
+       await setDoc(doc(db, 'userChats', res.user.uid), {
+         
+       })
+       toast.success('Successful')
+       // navigate to home page
+       navigate('/signin')
 
-          await setDoc(doc(db, 'users', user.uid), formDataCopy);
-
-          await setDoc(doc(db, 'userChats', user.uid), {
-            
-          })
-          toast.success('Successful')
-          // navigate to home page
-          navigate('/signin')
       } catch (error) {
-        console.log(error)
           toast.error('Not Succesful')
       } 
+
+    
 } 
+
   return (
     <div className="min-h-screen h-screen items-center justify-center py-12 mx-10 lg:mx-auto max-w-md  space-y-8 ">
     {/* Header */}
@@ -100,18 +146,18 @@ function SignUp() {
           </h2>
 
           <p className="mt-2 text-center text-sm text-gray-600">
-            <a href='/signin' className="font-medium text-gray-500">
+            <Link to='/signin' className="font-medium text-gray-500">
             Already have an account? <span className="font-medium hover:text-black text-teal-500">Login</span>
-            </a>
+            </Link>
           </p>
         </div>
 
     {/* form */}
   
-        <form action="" className="mt-8 space-y-6" onSubmit={submitForm} >
+        <form action="" className="mt-8 c space-y-6" onSubmit={submitForm} >
             <div className="-space-y-px">
              
-              <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="FullName"  value ={fullname} onChange={onFullNameChange}/>
+              <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="FullName (All In Lower Case)"  value ={fullname} onChange={onFullNameChange}/>
 
             </div>
 
@@ -142,7 +188,15 @@ function SignUp() {
 
            </div>
 
-            <input value="Sign Up" type="submit" className=" relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
+           {/* <div className="-space-y-px">
+             <input type="file" className="" id="imgUpload" onChange={onAvatarChange} style={{display:"none"}} />
+             <label htmlFor="imgUpload" className=" flex items-center space-x-3 "  >
+                  <PhotoIcon height={24} width={24} />
+                  <span className="text-gray-400">Add Profile Picture</span>
+             </label>
+           </div> */}
+
+            <input value="Sign Up" type="submit" className="cursor-pointer relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
         </form>
     
        

@@ -1,27 +1,43 @@
-import { useState } from "react"
+import {  useState } from "react"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate} from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import {db} from "../firebase"
+import { Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify"
 
 function SignIn() {
 
-    const [email, setEmail] = useState('');
+    const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate()
-  
+   
+
     const submit = async (e) => {
         e.preventDefault();
+       
 
         try {
           const auth = getAuth();
-          const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          if (userCredential.user) {
-            toast.success("You are logged in")
-            navigate('/')
-          }
-  
+          const q = query(collection(db, "users"), where("matNo", "==", id));
+          const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              const em = doc.data().email
+              try{
+                signInWithEmailAndPassword(auth, em, password).then((data) => {
+                  if (data.user) {
+                    toast.success("You are logged in")
+                    navigate('/')
+                  }
+                });  
+              }
+              catch(err){
+                alert('Bad User Credential')
+              }
+              
+            }) 
+          
         } catch(error) {
-              toast.error('Bad User Credentials')
+              toast.error('Sign In Failed')
         }
   
     }
@@ -36,18 +52,18 @@ function SignIn() {
                   </h2>
 
                   <p className="mt-2 text-center text-sm text-gray-600">
-                    <a href='/signup' className="font-medium text-gray-500">
+                    <Link to='/signup' className="font-medium text-gray-500">
                       Dont have an account yet? <span className="font-medium hover:text-black text-teal-500">Sign up</span>
-                    </a>
+                    </Link>
                   </p>
                 </div>
 
             {/* form */}
           
-                <form action="" className="mt-8 space-y-6" onSubmit={submit}>
+                <form action="" className="mt-8 px-4 lg:px-0 space-y-6" onSubmit={submit}>
                     <div className="-space-y-px">
                      
-                      <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="Email / Matriculation Number"  value ={email} onChange={(e) => setEmail(e.target.value) }/>
+                      <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="Staff ID / Matriculation Number"  value ={id} onChange={(e) => setId(e.target.value) }/>
                     </div>
 
 
@@ -56,7 +72,7 @@ function SignIn() {
                      <input type="password" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="Password"  value ={password} onChange={(e) => setPassword(e.target.value) }/>
                    </div>
 
-                    <input value="Sign In" onSubmit={submit} type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
+                    <input value="Sign In" onSubmit={submit} type="submit" className="group cursor-pointer relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
                 </form>
                
     </div>

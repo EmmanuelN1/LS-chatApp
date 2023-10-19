@@ -8,7 +8,7 @@ function Support() {
 
 const sendMail = () => {
     window.open(
-        `mailto:info@spyrth.com?subject=${encodeURIComponent(
+        `mailto:marvation1@gmail.com?subject=${encodeURIComponent(
           subject
         )}&body=${encodeURIComponent(fname)} (${encodeURIComponent(
           email
@@ -35,8 +35,8 @@ const sendMail = () => {
 
           <div className="w-full md:flex lg:flex xl:flex mt-2 mb-5">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label className="block uppercase text-xs text-gray-700 font-bold mb-2 tracking-wider">Subject</label>
-                            <input type="text" name="subject" id="" required placeholder="Subject" className="block bg-gray-100 py-3 px-4 w-full border border-gray-400 text-black rounded-md focus:outline-none "  value={subject} onChange={(e) => setSubject(e.target.value)}  />
+                            <label className="block uppercase text-xs text-gray-700 font-bold mb-2 tracking-wider">Subject </label>
+                            <input type="text" name="subject" id="" required placeholder="Subject Of This Mail" className="block bg-gray-100 py-3 px-4 w-full border border-gray-400 text-black rounded-md focus:outline-none "  value={subject} onChange={(e) => setSubject(e.target.value)}  />
                       </div>
                     
                       <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">

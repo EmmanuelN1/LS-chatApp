@@ -4,16 +4,6 @@ function Chats() {
   return (
     <div className="chats overflow-scroll">
         <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
     </div>
   )
 }
