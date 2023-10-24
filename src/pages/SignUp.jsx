@@ -11,11 +11,8 @@ import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 
 function SignUp() {
     const navigate = useNavigate();
-    // const [dURL, setDurl] = useState("")
+
    
-  
-
-
     const [formData, setFormData] = useState({
       fullname: '',
       matNo: '',
@@ -31,6 +28,7 @@ function SignUp() {
   
   //destructuring emanil and password from the form data
   const { email, password, profession, matNo, fullname} = formData
+
     const onFullNameChange = (e) => {
       setFormData((prevState) => ({
         ...prevState,
@@ -111,6 +109,9 @@ function SignUp() {
           
        //creating an instance of the formData
        const formDataCopy = {...formData};
+       const fname = formDataCopy.fullname
+       const fnameLower = fname.toLowerCase()
+       formDataCopy.fullname = fnameLower
        delete formDataCopy.password
        delete formDataCopy.avatarUrl
        formDataCopy.uid = res.user.uid
@@ -157,7 +158,7 @@ function SignUp() {
         <form action="" className="mt-8 c space-y-6" onSubmit={submitForm} >
             <div className="-space-y-px">
              
-              <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="FullName (All In Lower Case)"  value ={fullname} onChange={onFullNameChange}/>
+              <input type="text" className="sr-only rounded-md appearance-none relative block w-full h-8  px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-200 focus:ring-0  sm:text-sm" required placeholder="FullName"  value ={fullname} onChange={onFullNameChange}/>
 
             </div>
 

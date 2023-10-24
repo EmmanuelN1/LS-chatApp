@@ -3,6 +3,7 @@ import {collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, update
 import {db} from "../firebase"
 import {AuthContext} from "../contextApi/AuthContext"
 import Img from "../assets/user.png"
+import {MagnifyingGlassIcon}  from  "@heroicons/react/24/outline"
 
 
 
@@ -19,6 +20,7 @@ useEffect(() => {
 }, [user])
 
   const searchUser = async () => {
+    
     //   const q = query(collection(db, "users"), where("fullname", "==", username))
 
     //   try{
@@ -34,7 +36,8 @@ useEffect(() => {
     // }
     
     try {
-        const q = query(collection(db, "users"), where("fullname", "==", username));
+        let uLower = username.toLowerCase()
+        const q = query(collection(db, "users"), where("fullname", "==", uLower));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const u = [];
           querySnapshot.forEach((doc) => {
@@ -46,12 +49,16 @@ useEffect(() => {
       } catch(err){
         setError(true)
       }
+      
 }
 
 
 
-  const handleKey = (e) => {
-      e.code === "Enter" && searchUser()
+  const handleClick = (e) => {
+    if  (username == "") {
+      alert('Username empty')
+    }
+      searchUser()
   }
   
   const handleSelect = async (u) => {
@@ -105,8 +112,9 @@ useEffect(() => {
 
   return (
     <div className="search"> 
-        <div className="searchForm">
-            <input type="text" name="" id="" placeholder="Search For A User" className="text-xs " onKeyDown={handleKey} onChange={(e) => setUsername(e.target.value)} value={username}/>
+        <div className="searchForm flex">
+            <input type="text" name="" id="" placeholder="Search User" className="text-xs flex-1 " onChange={(e) => setUsername(e.target.value)} value={username}/>
+            <MagnifyingGlassIcon width='15px' height="15px" onClick={handleClick}/>
         </div>
 
         {error && <span>No User Found</span>}

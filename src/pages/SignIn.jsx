@@ -18,21 +18,18 @@ function SignIn() {
 
         try {
           const auth = getAuth();
-          const q = query(collection(db, "users"), where("matNo", "==", id));
+          const idLower = id.toLowerCase()
+          const q = query(collection(db, "users"), where("matNo", "==", idLower));
           const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
               const em = doc.data().email
-              try{
                 signInWithEmailAndPassword(auth, em, password).then((data) => {
                   if (data.user) {
                     toast.success("You are logged in")
                     navigate('/')
                   }
                 });  
-              }
-              catch(err){
-                alert('Bad User Credential')
-              }
+             
               
             }) 
           

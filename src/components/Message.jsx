@@ -24,8 +24,8 @@ useEffect(() => {
         </div>
 
         <div className="messageContent ownerMessageContent space-y-3">
-              <p className="messsageText ownerText text-sm lg:text-base">{message.text}</p>
-             {message.image && <img src={avatar} className="messageImage" alt="messageImage" />}
+              <p className={`messsageText ${message.senderId === currentUser.uid && 'ownerText'}  text-sm lg:text-base`}>{message.text}</p>
+            
         </div>
     </div>
   )

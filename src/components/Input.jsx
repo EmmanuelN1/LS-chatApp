@@ -20,32 +20,32 @@ function Input() {
     const {data} = useContext(ChatContext)
 
     const send = async () => {
-        if (image) {
-           const storageRef = ref(storage, uuid())
-           const uploadTask = uploadBytesResumable(storageRef, image)
+        // if (image) {
+        //    const storageRef = ref(storage, uuid())
+        //    const uploadTask = uploadBytesResumable(storageRef, image)
 
            //register three observer
-         uploadTask.on (
-            (error) => {
-              toast.error('Image Upload failed')
-            },
+        //  uploadTask.on (
+        //     (error) => {
+        //       toast.error('Image Upload failed')
+        //     },
 
-          async  ()  => { 
-              getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
-                await updateDoc(doc(db, 'chats', data.chatId), {
-                    messages: arrayUnion({
-                        id: uuid(),
-                        text,
-                        senderId: currentUser.uid,
-                        date: Timestamp.now(),
-                        image: downloadURL
-                    })
-                })
-                })
-            }
-          )
+        //   async  ()  => { 
+        //       getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+        //         await updateDoc(doc(db, 'chats', data.chatId), {
+        //             messages: arrayUnion({
+        //                 id: uuid(),
+        //                 text,
+        //                 senderId: currentUser.uid,
+        //                 date: Timestamp.now(),
+        //                 image: downloadURL
+        //             })
+        //         })
+        //         })
+        //     }
+        //   )
 
-        } else{
+        // } else{
             await updateDoc(doc(db, 'chats', data.chatId), {
                 messages: arrayUnion({
                     id: uuid(),
@@ -54,7 +54,7 @@ function Input() {
                     date: Timestamp.now()
                 })
             })
-        }
+        // }
 
         await updateDoc(doc(db,"userChats", currentUser.uid), {
             [data.chatId + ".lastMessage"]:{
@@ -79,10 +79,10 @@ function Input() {
         <div className="input">
             <input type="text" placeholder="Type A Message..." class="inputText text-xs lg:text-sm" onChange={(e) => setText((e).target.value)} value={text}/>
             <div className="inputSend space-x-3">
-                <input type="file" style={{display:"none"}} id="file" onChange={e => setImage(e.target.files[0])}/>
+                {/* <input type="file" style={{display:"none"}} id="file" onChange={e => setImage(e.target.files[0])}/>
                 <label htmlFor="file">
                     <PhotoIcon height={24} width={24}/>
-                </label>
+                </label> */}
 
                 <PaperAirplaneIcon onClick={send} fill="#008080" height={24} width={24}/>
 
