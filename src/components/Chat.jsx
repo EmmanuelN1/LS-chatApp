@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react"
-import Img from "../assets/user.png"
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase";
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../contextApi/AuthContext";
 import { ChatContext } from "../contextApi/ChatContext";
+import { db } from "../firebase";
+import Img from "../assets/user.png"
 
 function Chat() {
 
@@ -31,20 +31,20 @@ function Chat() {
       payload: u
     })
  }
+ 
 
   return (
 
     <>
         {  Object.entries(chats)?.sort((a,b)=> b[1].date - a[1].date).map((chat) => (
-          <div className="userChat space-x-2" key ={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>
+          <div className="userChat space-x-2" key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>
               <img src={Img} alt="" className="userChatImage" />
               <div className="userInfo">
                 <span className="text-xs lg:text-sm font-bold ">{chat[1].userInfo?.fullname}</span>
                 <p className="text-xs lg:text-sm text-gray-400">{chat[1].lastMessage?.text}</p>
               </div>
           </div>
-        ))  
-           }
+        ))}
       </>
       
     

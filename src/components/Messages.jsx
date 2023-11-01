@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from "react"
-import Message from "../components/Message"
-import { ChatContext } from "../contextApi/ChatContext"
 import { doc, onSnapshot } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react"
+import { ChatContext } from "../contextApi/ChatContext"
 import { db } from "../firebase";
+import Message from "../components/Message"
+
 
 function Messages() {
   const [messages, setMessages] = useState([])

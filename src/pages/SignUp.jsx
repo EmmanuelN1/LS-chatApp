@@ -4,8 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import {db} from "../firebase"
-import { PhotoIcon} from "@heroicons/react/24/outline";
-import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+
 
 
 
@@ -19,7 +18,6 @@ function SignUp() {
       profession: '',
       email: '',
       password:'',
-      // avatarUrl: '',
       uid: ""
     
   })
@@ -79,41 +77,17 @@ function SignUp() {
           const auth = getAuth();
 
           const res = await createUserWithEmailAndPassword(auth, email, password);
-          //Uploading the avatarUrl
-          // const storageRef = ref(storage, fullname)
-          // const uploadTask = uploadBytesResumable(storageRef, formData.avatarUrl)
-
-          //register three observer
-        //  uploadTask.on (
-        //     (error) => {
-        //       toast.error('Image Upload failed')
-        //     },
-
-        //   async  ()  => { 
-        //       getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
-        //                 // setDurl(downloadURL);
-                        
-        //               await updateProfile(res.user, {
-        //                 display:fullname,
-        //                 // photoURL: dURL
-        //               })
-
-                     
-        //         }
-                
-                
-                
-        //         )
-        //     }
-        //   )
+   
           
        //creating an instance of the formData
        const formDataCopy = {...formData};
        const fname = formDataCopy.fullname
        const fnameLower = fname.toLowerCase()
+       const id = formDataCopy.matNo
+       const idLower = id.toLowerCase()
+       formDataCopy.matNo = idLower
        formDataCopy.fullname = fnameLower
        delete formDataCopy.password
-       delete formDataCopy.avatarUrl
        formDataCopy.uid = res.user.uid
        formDataCopy.timestamp = serverTimestamp();
 
@@ -197,7 +171,7 @@ function SignUp() {
              </label>
            </div> */}
 
-            <input value="Sign Up" type="submit" className="cursor-pointer relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
+            <input value="Sign Up" type="submit" className="group bg-teal-700 relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white  focus:outline-none mt-10" />
         </form>
     
        

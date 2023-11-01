@@ -1,12 +1,11 @@
+import { useContext } from "react";
 import { CameraIcon, PlusCircleIcon,EllipsisHorizontalIcon} from "@heroicons/react/24/outline";
 import Messages from "./Messages";
 import Input from "./Input"
-import { useContext, useEffect } from "react";
 import { ChatContext } from "../contextApi/ChatContext";
 
 function Chatboard() {
   const {data} = useContext(ChatContext)
-  console.log(data)
 
   return (
     

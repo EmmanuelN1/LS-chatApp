@@ -1,13 +1,13 @@
 import SidebarNav from "./SidebarNav.jsx"
 import Search from "./Search.jsx"
-import Chats from "./Chats.jsx"
+import Chat from "./Chat.jsx"
 
 function Sidebar() {
   return (
     <div className="sidebar">
         <SidebarNav/>
         <Search/>
-        <Chats/>
+        <Chat/>
     </div>
   )
 }

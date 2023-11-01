@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef } from "react"
-import avatar from "../assets/user.png"
-import { ChatContext } from "../contextApi/ChatContext"
 import { AuthContext } from "../contextApi/AuthContext"
+import { ChatContext } from "../contextApi/ChatContext"
+import avatar from "../assets/user.png"
+import { DocumentIcon} from "@heroicons/react/24/outline";
 
 
 function Message({message}) {
@@ -24,8 +25,13 @@ useEffect(() => {
         </div>
 
         <div className="messageContent ownerMessageContent space-y-3">
-              <p className={`messsageText ${message.senderId === currentUser.uid && 'ownerText'}  text-sm lg:text-base`}>{message.text}</p>
-            
+              {message.text && <p className={`messsageText ${message.senderId === currentUser.uid && 'ownerText'}  text-sm lg:text-base`}>
+                
+                {message.text}</p> }
+              {message.imageUrl &&  <a href={message.imageUrl} target="_blank">
+                <DocumentIcon height={24} width={24} fill="#ffffff"/>
+              </a>}
+             
         </div>
     </div>
   )

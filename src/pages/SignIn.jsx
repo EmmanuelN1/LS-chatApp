@@ -28,6 +28,7 @@ function SignIn() {
                     toast.success("You are logged in")
                     navigate('/')
                   }
+                  
                 });  
              
               
