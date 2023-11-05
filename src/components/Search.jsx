@@ -1,18 +1,22 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
 import {db} from "../firebase"
 import Img from "../assets/user.png"
 import {MagnifyingGlassIcon}  from  "@heroicons/react/24/outline"
 import {AuthContext} from "../contextApi/AuthContext"
+import { ChatContext } from "../contextApi/ChatContext";
+
 
 
 function Search() {
   const [username, setUsername] = useState("")
   const [user, setUser] = useState(null)
   const [error, setError] = useState(false)
+  const [curr, setCurr] = useState({})
  
 
 const {currentUser} = useContext(AuthContext)
+const {data, dispatch} = useContext(ChatContext)
 
 
   const searchUser = async () => {
@@ -24,33 +28,39 @@ const {currentUser} = useContext(AuthContext)
           const querySnapshot =  await getDocs(q)
             querySnapshot.forEach((doc) => {
               setUser(doc.data())
-           })
-         
+              dispatch({
+              type: "CHANGE_USER",
+              payload: doc.data()
+               })
+           }) 
            
+           console.log(user)
      
     } catch (err) {
       setError(true)
        
     }
+    
 
 }
 
-
-
-  const handleClick = (e) => {
+  const handleClick = () => {
     if  (username === "") {
       alert('Username empty')
-    }
+    } else{
       searchUser()
+      
+    }
   }
+
   
   const handleSelect = async () => {
   
   //check whether the chats exist or not, if not create new one
 
   const  combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid
-  // const  combinedCurrentId = currentUser.uid + user.uid 
-  // const  combinedUserId = user.uid + currentUser.uid;
+
+  console.log(data)
 
 
    
@@ -67,16 +77,16 @@ const {currentUser} = useContext(AuthContext)
       //create user chat
       await updateDoc(doc(db, "userChats", currentUser.uid), {
         [combinedId + ".userInfo"] : {
-            uid: user.uid,
-            fullname: user.fullname,
-            profession: user.profession
+            uid: data.user.uid,
+            fullname: data.user.fullname,
+            profession: data.user.profession
             
         }, 
         
         [combinedId + ".date"] : serverTimestamp()
       })
   
-      await updateDoc(doc(db, "userChats", user.uid), {
+      await  Promise.all(updateDoc(doc(db, "userChats", user.uid), {
         [combinedId + ".userInfo"] : {
             uid: currentUser.uid,
             fullname: currentUser.fullname,
@@ -84,7 +94,7 @@ const {currentUser} = useContext(AuthContext)
         }, 
         
         [combinedId + ".date"] : serverTimestamp()
-      })
+      }))
     } 
 
   }
@@ -97,7 +107,20 @@ const {currentUser} = useContext(AuthContext)
   
   }
 
+  useEffect(() => {
 
+    // let com = data?.user.uid + currentUser.uid
+    // console.log(com)
+
+    // updateDoc(doc(db, "userChats", data.user.uid), {
+    //   [com + ".userInfo"] : {
+    //       uid: currentUser.uid,
+    //       fullname: currentUser.fullname,
+    //       profession: currentUser.profession
+    //   }, 
+
+    // })
+  }, [dispatch])
 
   return (
     <div className="search"> 

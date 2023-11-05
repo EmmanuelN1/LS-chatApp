@@ -1,12 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../contextApi/AuthContext";
 import { ChatContext } from "../contextApi/ChatContext";
-import { PhotoIcon, PaperAirplaneIcon} from "@heroicons/react/24/outline";
+import {PaperAirplaneIcon} from "@heroicons/react/24/outline";
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db, storage} from "../firebase";
+import { db} from "../firebase";
 import {v4 as uuid} from "uuid"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { toast } from "react-toastify";
 import { getStorage } from "firebase/storage";
 import { DocumentIcon} from "@heroicons/react/24/outline";
 
@@ -67,6 +66,7 @@ function Input() {
           }
 
           await Promise.all([image].map((img) => storeImage(img))).then((url) => {
+          
             updateDoc(doc(db, 'chats', data.chatId), {
               messages: arrayUnion({
                   id: uuid(),
@@ -95,6 +95,7 @@ function Input() {
             await updateDoc(doc(db,"userChats", currentUser.uid), {
                 [data.chatId + ".lastMessage"]:{
                     text,
+                  
                 },
 
                 [data.chatId + ".date"] : serverTimestamp()
@@ -102,11 +103,12 @@ function Input() {
 
             await updateDoc(doc(db,"userChats", data.user.uid), {
                 [data.chatId + ".lastMessage"]:{
-                    text,   
+                    text,  
                 },
 
                 [data.chatId + ".date"] : serverTimestamp()
             })
+
             setImage(null)
             setText("")
         }

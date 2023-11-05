@@ -171,7 +171,7 @@ function SignUp() {
              </label>
            </div> */}
 
-            <input value="Sign Up" type="submit" className="group bg-teal-700 relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white  focus:outline-none mt-10" />
+            <input value="Sign Up" type="submit" className="group bg-teal-700 cursor-pointer relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white  focus:outline-none mt-10" />
         </form>
     
        

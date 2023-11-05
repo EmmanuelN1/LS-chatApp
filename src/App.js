@@ -6,6 +6,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ChatComponent from './pages/ChatComponent';
 import Support from './pages/Support';
+import Forgot from './pages/Forgot';
 import Profile from './pages/Profile';
 import Navbar from "./components/Navbar"
 import { useContext } from 'react';
@@ -43,11 +44,8 @@ function App() {
                       <Profile/>
                     </ProtectedRoute>
                     }/>
-                    <Route path="/support" element={
-                    <ProtectedRoute>
-                      <Support/>
-                    </ProtectedRoute>
-                    }/>
+                    <Route path="/forgot" element={ <Forgot/> }/>
+                    <Route path="/support" element={ <Support/> }/>
                 </Routes>
 
                 <Navbar/>

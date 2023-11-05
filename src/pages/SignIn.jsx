@@ -72,6 +72,11 @@ function SignIn() {
 
                     <input value="Sign In" onSubmit={submit} type="submit" className="group cursor-pointer relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-700 focus:outline-none mt-10" />
                 </form>
+                <p className="mt-2 text-center text-sm text-gray-600">
+                    <Link to='/forgot' className="font-medium text-gray-500">
+                      Forgot Your Password <span className="font-medium hover:text-black text-teal-500">Reset Now</span>
+                    </Link>
+                  </p>
                
     </div>
   )
